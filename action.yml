@@ -1,0 +1,92 @@
+
+name   : 'Hello World and Cache Test'
+description : 'Greet someone'
+author : 'Takahiro Itou'
+
+inputs :
+  who-to-greet : # id of input
+    description : 'Who to greet'
+    required    : true
+    default     : 'World'
+
+outputs :
+  random-number :
+    description : "Random number"
+    value : ${{ steps.random-number-generator.outputs.random-number }}
+  common-value :
+    description : "Cached common value"
+    value : ${{ steps.common-number.outputs.common-value }}
+  cached-date  :
+    description : "Cache create date/time"
+    value : ${{ steps.common-number.outputs.cached-date }}
+
+runs:
+  using : "composite"
+  steps :
+    - name : Initialize
+      run  : |
+        pwd
+        mkdir -p init
+        ls -alR
+      shell : bash
+
+    - name : Cache Common Value
+      id   : cache-common-value
+      uses : actions/cache@v4
+      env  :
+        cache-name : cache-common-value
+      with :
+        path : init/cached-common-value.txt
+        key  : ${{ runner.os }}-${{ env.cache-name }}
+
+    - if : ${{ steps.cache-common-value.outputs.cache-hit != 'true' }}
+      name : Write Cache
+      run  : |
+        echo "$(echo $RANDOM)" | tee init/cached-common-value.txt
+        date | tee -a init/cached-common-value.txt
+        ls -l init/
+      shell : bash
+
+    - name : Random Number Generator
+      run  : |
+        if [[ ! -f init/random.txt ]] ; then
+          echo "$(echo $RANDOM)" | tee init/random.txt
+        fi
+      shell : bash
+
+    - name : Set Greeting
+      run  : echo "Hello $INPUT_WHO_TO_GREET."
+      shell : bash
+      env  :
+        INPUT_WHO_TO_GREET : ${{ inputs.who-to-greet }}
+
+    - name : Read Random Number
+      id   : random-number-generator
+      run  : |
+        random_value=$(cat init/random.txt)
+        echo "random-number=${random_value}" >> $GITHUB_OUTPUT
+      shell : bash
+
+    - name : Read Common Value
+      id   : common-number
+      run  : |
+        cached_common_values=$(cat init/cached-common-value.txt)
+        common_value=$(echo "${cached_common_values}" | head -n 1)
+        cached_date=$(echo "${cached_common_values}"  | tail -n 1)
+        echo "common-value=${common_value}" >> ${GITHUB_OUTPUT}
+        echo "cached-date=${cached_date}"   >> ${GITHUB_OUTPUT}
+      shell : bash
+
+    - name : Set GitHub Path
+      run  : echo "$GITHUB_ACTION_PATH" >> $GITHUB_PATH
+      shell : bash
+      env  :
+        GITHUB_ACTION_PATH : ${{ github.action_path }}
+
+    - name : Run goodbye.sh
+      run  : goodbye.sh
+      shell : bash
+
+branding:
+  icon  : 'check-circle'
+  color : 'green'
