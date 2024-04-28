@@ -3,7 +3,7 @@
 install_prefix=$1
 install_version=$2
 
-package_name="cppunit-${install_versoin}"
+package_name="cppunit-${install_version}"
 package_file="${package_name}.tar.gz"
 
 download_url='https://dev-www.libreoffice.org/src'
