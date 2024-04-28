@@ -4,21 +4,18 @@ author : 'Takahiro Itou'
 description : 'Install CppUnit'
 
 inputs :
-  who-to-greet : # id of input
-    description : 'Who to greet'
-    required    : true
-    default     : 'World'
-
-outputs :
-  random-number :
-    description : "Random number"
-    value : ${{ steps.random-number-generator.outputs.random-number }}
-  common-value :
-    description : "Cached common value"
-    value : ${{ steps.common-number.outputs.common-value }}
-  cached-date  :
-    description : "Cache create date/time"
-    value : ${{ steps.common-number.outputs.cached-date }}
+  install-prefix
+    description : 'Install Directory'
+    required    : false
+    default     : ${{ github.workspace }}/tools/cppunit
+  version
+    description : 'Version of CppUnit'
+    required    : false
+    default     : '1.15.1'
+  sha256sum
+    description : 'Hash of Source Package'
+    required    : false
+    default : 89c5c6665337f56fd2db36bc3805a5619709d51fb136e51937072f63fcc717a7
 
 runs:
   using : "composite"
