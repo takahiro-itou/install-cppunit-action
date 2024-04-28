@@ -1,7 +1,7 @@
 
-name   : 'Hello World and Cache Test'
-description : 'Greet someone'
+name   : 'Install CppUnit'
 author : 'Takahiro Itou'
+description : 'Install CppUnit'
 
 inputs :
   who-to-greet : # id of input
