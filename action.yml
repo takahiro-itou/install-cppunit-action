@@ -45,7 +45,7 @@ runs:
     - if : ${{ steps.cache-installed-cppunit.outputs.cache-hit != 'true' }}
       name : Install CppUnit
       run  : |
-        install.sh ${{ inputs.install-prefix }} ${{ inputs.version }}
+        install.sh "${{ inputs.install-prefix }}" "${{ inputs.version }}"
       shell : bash
 
 branding:
