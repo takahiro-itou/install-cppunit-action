@@ -21,7 +21,7 @@ runs:
   using : "composite"
   steps :
     - name : Get Real Install Directory
-      id   : real-prefix:
+      id   : real-prefix
       run  : |
         install_prefix=$(readlink -f "${{ inputs.install-prefix }}"
         echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTUT}"
