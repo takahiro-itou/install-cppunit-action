@@ -24,7 +24,7 @@ runs:
       id   : real-prefix
       run  : |
         install_prefix=$(readlink -m "${{ inputs.install-prefix }}")
-        echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTUT}"
+        echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTPUT}"
       shell : bash
 
     - name : Cache Installed CppUnit
