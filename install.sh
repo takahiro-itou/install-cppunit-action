@@ -20,6 +20,6 @@ pushd "${package_name}"
 
 ./configure  --prefix="${install_prefix}"   \
     --disable-shared  --enable-static       \
-    &&  make  &&  make  install
+    &&  make  &&  sudo  make  install
 
 popd
