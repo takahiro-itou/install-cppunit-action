@@ -42,5 +42,5 @@ runs:
       shell : bash
 
 branding:
-  icon  : 'check-circle'
+  icon  : 'tool'
   color : 'green'
