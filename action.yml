@@ -23,7 +23,7 @@ runs:
     - name : Get Real Install Directory
       id   : real-prefix
       run  : |
-        install_prefix=$(readlink -f "${{ inputs.install-prefix }}")
+        install_prefix=$(readlink -m "${{ inputs.install-prefix }}")
         echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTUT}"
       shell : bash
 
