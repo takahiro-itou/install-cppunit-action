@@ -20,13 +20,20 @@ inputs :
 runs:
   using : "composite"
   steps :
+    - name : Get Real Install Directory
+      id   : real-prefix:
+      run  : |
+        install_prefix=$(readlink -f "${{ inputs.install-prefix }}"
+        echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTUT}"
+      shell : bash
+
     - name : Cache Installed CppUnit
       id   : cache-installed-cppunit
       uses : actions/cache@v4
       env  :
         cache-name : cache-installed-cppunit-${{ inputs.version }}
       with :
-        path : ${{ inputs.install-prefix }}
+        path : ${{ steps.real-prefix.outputs.real-install-dir }}
         key  : ${{ runner.os }}-${{ env.cache-name }}
 
     - name : Set GitHub Path
@@ -37,9 +44,16 @@ runs:
 
     - if : ${{ steps.cache-installed-cppunit.outputs.cache-hit != 'true' }}
       name : Install CppUnit
+      env  :
+        install-prefix : ${{ steps.real-prefix.outputs.real-install-dir }}
       run  : |
-        install.sh "${{ inputs.install-prefix }}" "${{ inputs.version }}"
+        install.sh "${{ env.install-prefix }}" "${{ inputs.version }}"
       shell : bash
+
+outputs :
+  real-install-dir :
+    description : "Real Install Directory"
+    value : ${{ steps.real-prefix.outputs.real-install-dir }}
 
 branding:
   icon  : 'tool'
