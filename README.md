@@ -19,7 +19,7 @@ https://github.com/takahiro-itou/install-cppunit-action-test
 
 
 ```
-- uses: actions/install-cppunit-action@v1.0.0
+- uses: actions/install-cppunit-action@v1.0.1
   with :
     # Install Directory.
     # インストール先ディレクトリ
