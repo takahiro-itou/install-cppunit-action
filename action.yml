@@ -20,13 +20,25 @@ inputs :
 runs:
   using : "composite"
   steps :
+    - name : Get Real Install Directory
+      id   : real-prefix
+      run  : |
+        if [[ "X${{ inputs.install-prefix }}Y" != 'XnoY' ]] ; then
+          install_prefix=$(readlink -m "${{ inputs.install-prefix }}")
+        else
+          install_prefix="${{ inputs.install-prefix }}"
+        fi
+        echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTPUT}"
+      shell : bash
+
     - name : Cache Installed CppUnit
       id   : cache-installed-cppunit
+      if   : ${{ inputs.install-prefix }} != 'no' }}
       uses : actions/cache@v4
       env  :
         cache-name : cache-installed-cppunit-${{ inputs.version }}
       with :
-        path : ${{ inputs.install-prefix }}
+        path : ${{ steps.real-prefix.outputs.real-install-dir }}
         key  : ${{ runner.os }}-${{ env.cache-name }}
 
     - name : Set GitHub Path
@@ -35,11 +47,18 @@ runs:
         GITHUB_ACTION_PATH : ${{ github.action_path }}
       shell : bash
 
-    - if : ${{ steps.cache-installed-cppunit.outputs.cache-hit != 'true' }}
-      name : Install CppUnit
+    - name : Install CppUnit
+      if   : ${{ steps.cache-installed-cppunit.outputs.cache-hit != 'true' }}
+      env  :
+        install-prefix : ${{ steps.real-prefix.outputs.real-install-dir }}
       run  : |
-        install.sh "${{ inputs.install-prefix }}" "${{ inputs.version }}"
+        install.sh "${{ env.install-prefix }}" "${{ inputs.version }}"
       shell : bash
+
+outputs :
+  real-install-dir :
+    description : "Real Install Directory"
+    value : ${{ steps.real-prefix.outputs.real-install-dir }}
 
 branding:
   icon  : 'settings'

@@ -3,6 +3,11 @@
 install_prefix=$1
 install_version=$2
 
+if [[ "X${install_prefix}Y" == 'no' ]] ; then
+    # インストールしない
+    exit  0
+fi
+
 if [[ -f "${install_prefix}/lib/libcppunit.a" ]] ; then
     echo "Already installed : ${install_prefix}"
     exit  0
