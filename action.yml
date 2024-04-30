@@ -42,8 +42,8 @@ runs:
         GITHUB_ACTION_PATH : ${{ github.action_path }}
       shell : bash
 
-    - if : ${{ steps.cache-installed-cppunit.outputs.cache-hit != 'true' }}
-      name : Install CppUnit
+    - name : Install CppUnit
+      if   : ${{ steps.cache-installed-cppunit.outputs.cache-hit != 'true' }}
       env  :
         install-prefix : ${{ steps.real-prefix.outputs.real-install-dir }}
       run  : |
