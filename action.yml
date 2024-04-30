@@ -23,7 +23,11 @@ runs:
     - name : Get Real Install Directory
       id   : real-prefix
       run  : |
-        install_prefix=$(readlink -m "${{ inputs.install-prefix }}")
+        if [[ "X${{ inputs.install-prefix }}Y" != 'XnoY' ]] ; then
+          install_prefix=$(readlink -m "${{ inputs.install-prefix }}")
+        else
+          install_prefix="${{ inputs.install-prefix }}"
+        fi
         echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTPUT}"
       shell : bash
 
