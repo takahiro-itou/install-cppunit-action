@@ -3,7 +3,7 @@
 install_prefix=$1
 install_version=$2
 
-if [[ "X${install_prefix}Y" == 'no' ]] ; then
+if [[ "X${install_prefix}Y" == 'XnoY' ]] ; then
     # インストールしない
     exit  0
 fi
