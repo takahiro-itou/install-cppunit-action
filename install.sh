@@ -3,7 +3,7 @@
 install_prefix=$1
 install_version=$2
 
-if [[ "X${install_prefix}Y" == 'no' ]] ; then
+if [[ "X${install_prefix}Y" == 'XnoY' ]] ; then
     # インストールしない
     exit  0
 fi
@@ -25,6 +25,9 @@ pushd "${package_name}"
 
 ./configure  --prefix="${install_prefix}"   \
     --disable-shared  --enable-static       \
-    &&  make  &&  make  install
+    || exit  $?
+
+make            || exit  $?
+make  install   || exit  $?
 
 popd
