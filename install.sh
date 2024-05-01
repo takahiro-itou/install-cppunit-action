@@ -25,6 +25,9 @@ pushd "${package_name}"
 
 ./configure  --prefix="${install_prefix}"   \
     --disable-shared  --enable-static       \
-    &&  make  &&  make  install
+    || exit  $?
+
+make            || exit  $?
+make  install   || exit  $?
 
 popd
