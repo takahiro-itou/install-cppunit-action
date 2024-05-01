@@ -27,7 +27,7 @@ runs:
         if [[ "X${install_prefix}Y" != 'XnoY' ]] ; then
           install_prefix=$(readlink -m "${install_prefix}")
         else
-          install_prefix="$install_prefix}"
+          install_prefix="${install_prefix}"
         fi
         echo "real-install-dir=${install_prefix}" | tee -a "${GITHUB_OUTPUT}"
       shell : bash
