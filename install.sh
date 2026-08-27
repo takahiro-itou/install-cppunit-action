@@ -30,4 +30,6 @@ pushd "${package_name}"
 make            || exit  $?
 make  install   || exit  $?
 
+df -h
+
 popd
