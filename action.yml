@@ -35,7 +35,7 @@ runs:
     - name : Cache Installed CppUnit
       id   : cache-installed-cppunit
       if   : ${{ inputs.install-prefix != 'no' }}
-      uses : actions/cache@v4
+      uses : actions/cache@v6
       env  :
         cache-name : cache-installed-cppunit-${{ inputs.version }}
       with :
